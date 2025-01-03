@@ -1,4 +1,4 @@
-describe("Halaman Berita", () => {
+describe("Sidebar - Halaman Berita", () => {
   Cypress.on("uncaught:exception", (err, runnable) => {
     return false;
   });
@@ -20,7 +20,7 @@ describe("Halaman Berita", () => {
     cy.get(".nav-pills > :nth-child(3) > .nav-link").click();
   });
 
-  it("TC-KD-002 Menampilkan berita pada banner", () => {
+  it("TC-KD-006 Menampilkan berita pada banner", () => {
     cy.get(".owl-item .item div[style]").each(($el) => {
       // Ambil nilai dari atribut style
       const style = $el.attr("style");
@@ -45,7 +45,7 @@ describe("Halaman Berita", () => {
     });
   });
 
-  it("TC-KD-003 Menampilkan berita pada list", () => {
+  it("TC-KD-007 Menampilkan berita pada list", () => {
     // dapatkan list
     cy.get(".col-12 > .row > .col-4 > a > .w-100").then(($items) => {
       const itemCount = $items.length; // hitung item
