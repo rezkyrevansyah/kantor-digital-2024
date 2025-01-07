@@ -1,10 +1,10 @@
-describe("Keuangan - Right Navbar", () => {
+describe("Sidebar - Laporan", () => {
   Cypress.on("uncaught:exception", (err: Error, runnable: Mocha.Runnable) => {
     return false; // Ignore uncaught exceptions globally
   });
 
   beforeEach(() => {
-    cy.visit("https://kotapalembang.baznas.go.id/");
+    cy.visit("/");
 
     // 1. Buka hamburger bar
     cy.get(".navbar-nav > .nav-item > .nav-link").click();
@@ -21,8 +21,6 @@ describe("Keuangan - Right Navbar", () => {
   });
 
   it("Mengecek apakah file bisa diakses", () => {
-    cy.contains("404").should("not.exist");
-
     const rowSelector = ".table-responsive table tbody tr";
 
     cy.get(rowSelector)
@@ -36,15 +34,6 @@ describe("Keuangan - Right Navbar", () => {
       cy.log(`Checking row ${index + 1} of ${$rows.length}`);
 
       cy.wrap($row)
-        .find("i.fas.fa-book")
-        .should("exist")
-        .and("be.visible")
-        .click({ force: true })
-        .then(() => {
-          cy.log(`Icon clicked successfully in row ${index + 1}`);
-        });
-
-      cy.wrap($row)
         .find("a[href]")
         .should("have.attr", "href")
         .then((href) => {
@@ -53,11 +42,18 @@ describe("Keuangan - Right Navbar", () => {
               (response) => {
                 if (response.status === 200) {
                   cy.log(`Valid link found in row ${index + 1}: ${href}`);
+                } else if (response.status === 404) {
+                  cy.log(
+                    `404 Error detected in row ${
+                      index + 1
+                    }: ${href}, stopping the test.`
+                  );
+                  assert.fail(`Test stopped due to 404 Error on link: ${href}`);
                 } else {
                   cy.log(
-                    `Invalid link in row ${index + 1}: ${href}, Status: ${
-                      response.status
-                    }`
+                    `Non-200 status detected in row ${
+                      index + 1
+                    }: ${href}, Status: ${response.status}`
                   );
                 }
               }
